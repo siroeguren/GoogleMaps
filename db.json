@@ -1,0 +1,26 @@
+{
+    "ciudades": [
+      {
+        "id": 0,
+        "nombre": "Nueva York",
+        "latitud": 40.7128,
+        "longitud": -74.0060,
+        "descripccion" : "La ciudad de los rascacielos, famosa por su impresionante horizonte urbano, su vibrante vida nocturna, sus tiendas de alta costura, sus restaurantes de clase mundial y sus importantes sitios turísticos como la Estatua de la Libertad, el Central Park y el Empire State Building."
+      },
+      {
+        "id": 1,
+        "nombre": "París",
+        "latitud": 48.8566,
+        "longitud": 2.3522,
+        "descripccion" : "Conocida como la ciudad del amor, París es famosa por sus elegantes calles, cafés y museos. Es el hogar de algunos de los monumentos más icónicos del mundo, como la Torre Eiffel, el Museo del Louvre y la Catedral de Notre Dame. Además, París es un destino gastronómico de primer nivel, con algunos de los mejores restaurantes del mundo."
+      },
+      {
+        "id": 2,
+        "nombre": "Tokio",
+        "latitud": 35.6895,
+        "longitud": 139.6917,
+        "descripccion" :  "La capital de Japón, es una ciudad moderna y tecnológica que aún conserva sus tradiciones. Es conocida por su ambiente frenético, su excelente comida y su impresionante cultura pop. Algunos de sus lugares turísticos más populares incluyen el Santuario Meiji, el barrio de Shinjuku y el mercado de Tsukiji."
+      }
+    ]
+  }
+  

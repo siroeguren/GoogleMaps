@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Actividad Mapas</title>
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+       #buttonsrow
+       {
+        display: flex;
+        flex-direction: row;
+        margin: auto;
+       }
+       #buttons
+       {
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+        text-align: center;
+       }
+       .button
+       {
+        text-align: center;
+        border-radius: 10%;
+        width: 175px;
+       }
+       h3,h2
+       {
+        text-align: center;
+
+       }
+       p
+       {
+        text-align: center;
+        text-decoration: solid;
+       }
+        #map 
+        {
+            margin: auto;
+            height: 75%;
+            width: 75%;
+        }
+        /* Optional: Makes the sample page fill the window. */
+        html,
+        body 
+        {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    </head>
+    <!-- Llama de manera asíncrona a la función iniciar mapa (initMap) QUITAR ESE PARÁMETRO -->
+    <!-- <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&v=weekly&channel=2"
+        defer> 
+    </script> -->
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly&channel=2"
+    async>
+</script>
+    <script>
+        
+        
+        let map;
+        let arrayCities = [];
+        var i = -1;
+
+       async function initMap(condition = 'firstTime') 
+        {
+            await getCities();
+            let nombreCiudad = document.getElementById('city');
+            let descCiudad = document.getElementById('desc');
+
+            //Gestion del indice relacionado con el array
+            let mapID = (condition=='next') ? i++ : i--;
+            
+            //Control del callback del script de google maps
+            if (condition == "firstTime")
+            {
+                i = 0;
+            }
+            const mapOptions = 
+            {
+                zoom: 10,
+                center: { lat: arrayCities[i].latitud, lng: arrayCities[i].longitud },
+            };
+
+            map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+            const marker = new google.maps.Marker({
+                position: { lat: arrayCities[i].latitud, lng: arrayCities[i].longitud },
+                map: map,
+            });
+            const infowindow = new google.maps.InfoWindow({
+                content: "<p>Marker Location:" + marker.getPosition() + "</p>",
+            });
+
+            google.maps.event.addListener(marker, "click", () => {
+                infowindow.open(map, marker);
+            });
+
+            //Seteo el dato del db.json correspondiente al elemento html 
+            nombreCiudad.innerHTML = arrayCities[i].nombre;
+            descCiudad.innerHTML = arrayCities[i].descripccion;
+
+            //If que controla el estado de los botones en relacion al mapa que se este mostrando
+            if (i == arrayCities.length - 1)
+            {
+                document.getElementById('next').disabled = true;
+            }
+            else if (( i>0 ) && (i < arrayCities.length - 1))
+            {
+                document.getElementById('next').disabled = false;
+                document.getElementById('prev').disabled = false;
+            }
+            else if(i == 0)
+            {
+                document.getElementById('prev').disabled = true;
+            }
+            
+        }
+
+
+    //Funcion que devuelve un array de objetos a partir del API del json-server
+    async function getCities() 
+    {
+        const response = await fetch('http://localhost:3000/Ciudades');
+        if (!response.ok) 
+        {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return arrayCities = data;
+    }
+
+
+
+    this.onload = () =>
+    {
+        let prev = document.getElementById('prev').addEventListener('click',() => initMap('prev'));
+        let next = document.getElementById('next').addEventListener('click', () => initMap('next'));  
+        
+    }   
+    </script>
+
+    <body>
+    <h2>Mis 3 lugares favoritos</h2>
+    <div id="map"></div>
+    <h3 id="city"></h3>
+    <p id="desc"></p>
+
+    <div id="buttons">
+        <div id="buttonsrow">
+            <button class= 'button' id="prev" disabled>Anterior</button>
+            <button class= 'button' id="next">Siguiente</button>
+
+        </div>
+    </div>
+    </body>
+</html>
